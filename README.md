@@ -1,5 +1,5 @@
 # W3D_HW
-<style>
+<!-- <style>
 body {
 	font-family: Helvetica, Arial, 'Heiti TC', 'Microsoft JhengHei', sans-serif;
 }
@@ -12,7 +12,7 @@ body {
 	padding: 10px;
 	text-align: center;
 }
-</style>
+</style> -->
 
 <body>
 <div id="info">
