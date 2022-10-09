@@ -26,9 +26,7 @@ Semester<br>
 	<table border="1" style="margin-left: auto; margin-right: auto;">
 
 	   <tr align="center">
-			<td width="33%"><img src="gifs/hw1.gif" width="400px" height="400px"/></td>
-			<td width="33%"><img src="gifs/hw2.gif" width="400px" height="400px"/></td>
-			<td width="33%"><img src="gifs/hw3.gif" width="400px" height="400px"/></td>
+
 		</tr>
 	    
 <tr align="center">
