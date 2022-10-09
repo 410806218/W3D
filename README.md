@@ -1,5 +1,4 @@
 # W3D_HW
-
 <style>
 body {
 	font-family: Helvetica, Arial, 'Heiti TC', 'Microsoft JhengHei', sans-serif;
@@ -23,4 +22,21 @@ Semester<br>
 聯絡信箱 請點選<a href="myemail@gmail.com">
 <font color="lightblue">這裡</font></a>
 </div>
+<div id="hw">
+	<table border="1" style="margin-left: auto; margin-right: auto;">
 
+	   <tr align="center">
+			<td width="33%"><img src="gifs/hw1.gif" width="400px" height="400px"/></td>
+			<td width="33%"><img src="gifs/hw2.gif" width="400px" height="400px"/></td>
+			<td width="33%"><img src="gifs/hw3.gif" width="400px" height="400px"/></td>
+		</tr>
+	    
+<tr align="center">
+			<td><a href="hw1.html">hw1.html</a><br>Clock Animation</td>
+			<td><a href="hw2.html">hw2.html</a><br>Cannonball</td>
+			<td><a href="hw3.html">hw3.html</a><br>OBJ model</td>
+		</tr>
+
+	</table>
+</div>
+</body>
