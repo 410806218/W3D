@@ -1,0 +1,17 @@
+<html>
+<head>
+<script>
+function cop(){
+var str=document.getElementById("input1").value;
+document.getElementById("input2").value = str;
+}
+</script>
+</head>
+<body>
+<!--"onpropertychange"用于ie核心的浏览器，"oninput"用于firefox-->
+输入框1：
+<input id="input1" type="text" onpropertychange="cop()" oninput="cop()"/><br/>
+输入框2：
+<input id="input2" type="text"/>
+</body>
+</html>

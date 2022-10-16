@@ -1,0 +1,194 @@
+<div id="info">HW2
+    Enter the value to get line and innerproduct and vector product   
+    <canvas id='mycanvas' style='background-color:pink'> </canvas>
+    <script src="https://threejs.org/build/three.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  </div>
+ 
+    <div id='VV' style="position:absolute; left:auto; top: auto;  width:10%; height:auto;border-radius:10%;background-color:pink">
+            <BR>
+            &nbsp &nbspV yellowline<button  id='dvline' >drawline</button>
+            <hr>
+            <div style="text-align:center">
+            X<input type='text' id='VX' value='0' style="width:50%;"onpropertychange="VWDOT()" oninput="VWDOT()"><br><br>
+            Y<input type='text' id='VY' value='0' style="width:50%;"onpropertychange="VWDOT()" oninput="VWDOT()" ><br><br>
+            Z<input type='text' id='VZ' value='0' style="width:50%;"onpropertychange="VWDOT()" oninput="VWDOT()"><br><br>
+            </div>
+    </div>
+    <!-- 另外一個寫法<input type='text' id='WX' value='0' style="width:50%;" oninput = "OnInput (event)" onpropertychange="OnPropChanged (event)"><br><br> -->
+    <div id='WV' style="position:absolute; left:auto; top: 25%;  width:10%; height:auto;border-radius:10%;background-color:pink">
+        <BR>
+        &nbsp &nbspW blackline<button  id='dwline' >drawline</button>
+        <hr>
+            <div style="text-align:center">
+            X<input type='text' id='WX' value='0' style="width:50%;"onpropertychange="VWDOT()" oninput="VWDOT()" ><br><br>
+            Y<input type='text' id='WY' value='0' style="width:50%;"onpropertychange="VWDOT()" oninput="VWDOT()"><br><br>
+            Z<input type='text' id='WZ' value='0' style="width:50%;"onpropertychange="VWDOT()" oninput="VWDOT()"><br><br>
+        </div>
+    </div>
+    <div id='innprod' style="position:absolute; left:auto; top:45%;  width:10%; height:auto;border-radius:10%;background-color:pink">
+        <BR>
+            &nbsp &nbsp inner product
+        <hr>
+            <div style="text-align:center">
+            v dot w<input type='text' id='VW' value='0' style="width:50%;" ><br><br>   
+        </div>
+        &nbsp v X w <br> (vector product)  orangeline<button  id='dvwline' >drawline</button>
+        <hr>
+        <div style="text-align:center">
+            X<input type='text' id='VWX' value='0' style="width:50%;"><br><br>
+            Y<input type='text' id='VWY' value='0' style="width:50%;"><br><br>
+            Z<input type='text' id='VWZ' value='0' style="width:50%;"><br><br>
+        </div>
+    </div>
+    <!-- <p>
+        To read from input/text, two callbacks are avaiable:
+    </p>
+    <ul>
+        <li>
+        change(): called after return or tab is pressed (
+        <a href='http://stackoverflow.com/questions/12797700/jquery-detect-change-in-input-field'>reference</a> )
+        </li>
+        <li>
+        keyup(): called after each keypress (
+        <a href='http://stackoverflow.com/questions/574941/best-way-to-track-onchange-as-you-type-in-input-type-text'>reference</a> )
+        </li>
+    </ul> -->
+
+
+
+
+
+
+  <script>
+//https://zhidao.baidu.com/question/309992963.html
+ //js必要的三個元件 場景 成像器(渲染) #相機(視角)
+  var renderer, scene, camera;
+  var allPoints = [];
+
+  var countline=0;
+  var v=new THREE.Vector3();
+  var w=new THREE.Vector3();
+  var vxw=new THREE.Vector3();
+  init();
+  animate();
+  
+  function init() {
+      let myCanvas=document.getElementById('mycanvas')
+      renderer = new THREE.WebGLRenderer({canvas:myCanvas});
+      document.body.appendChild (renderer.domElement);
+      renderer.setSize (window.innerWidth, window.innerHeight);
+      
+      renderer.setClearColor (0x888888);
+      scene = new THREE.Scene();
+    //   const camera = new THREE.PerspectiveCamera(
+    //     75,  // 相機的垂直視野
+    //     width / height, // 相機的外觀比例
+    //     0.1, // 接近的相機視體平面距離值
+    //     1000 //遠的相機視體平面距離值
+    //     )
+      camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 100 );  
+      camera.position.z = 30;
+      camera.position.x = 5;
+      camera.position.y = 5;
+      grid = new THREE.GridHelper(50,20,'red','white');
+      //grid.rotation.y = 25;
+      //grid.rotation.x = 25;
+      //通过Three.js类AxesHelper创建一个三维坐标系三个坐标轴的颜色分别为红绿蓝(RGB)，R、G、B三种颜色坐标轴是分别表示X、Y、Z轴，也就是红色轴是X轴，绿色轴是Y轴，蓝色轴是Z轴，你可以通过设置一个网格模型的.position属性去验证。
+      var axes = new THREE.AxesHelper( 150,20 );
+      // 和网格模型Mesh一样，AxesHelper你也可以理解为一个模型对象，需要插入到场景中
+      scene.add( axes );
+      scene.add (grid);
+  }
+
+
+  function doResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  }
+  //https://sbcode.net/threejs/geometry-to-buffergeometry/
+  function makeLineSegment (vec1, vec2, linecolor) {
+    let points = [];
+    points.push (vec1, vec2);
+      let geometry = new THREE.BufferGeometry();
+     geometry.setFromPoints(points);
+     let line = new THREE.Line (geometry, new THREE.LineBasicMaterial({color:linecolor}));
+     return line;
+  }
+  function animate() {
+      requestAnimationFrame (animate);
+      renderer.render(scene, camera)
+  }
+  $('#VX').keyup( function() {
+        v.x = $(this).val();        
+        console.log(v.x);
+        VWDOT();
+    });
+  $('#VY').keyup( function() {
+        v.y = $(this).val();
+        console.log(v.y);
+        VWDOT();
+    });
+  $('#VZ').keyup( function() {
+        v.z = $(this).val();
+        console.log(v.z);
+        VWDOT();
+    });
+  $('#WX').keyup( function() {
+        w.x = $(this).val();
+        console.log(w.x);
+        VWDOT();
+    });
+  $('#WY').keyup( function() {
+        w.y = $(this).val();
+        console.log(w.y);
+        VWDOT();
+    });
+  $('#WZ').keyup( function() {
+        w.z = $(this).val();
+        console.log(w.z);
+        VWDOT();
+    });
+    function VWDOT(){
+        var vwdot;
+        vwdot=v.x*w.x+v.y*w.y+v.z*w.z;
+        console.log("VWDOT=",vwdot);
+        document.getElementById("VW").value = vwdot;
+        vxw.x=v.y*w.z-v.z*w.y;
+        vxw.y=-(v.x*w.z-v.z*w.x);
+        vxw.z=v.x*w.y-v.y*w.x;
+        document.getElementById("VWX").value =  vxw.x;
+        document.getElementById("VWY").value =  vxw.y;
+        document.getElementById("VWZ").value =  vxw.z;
+        
+        $('#dvline').click(
+        function() {
+            var point1 = new THREE.Vector3 (v.x,v.y,v.z);
+            var v2=v.dot(2);
+            var point2 = new THREE.Vector3 (v2.x,v2.y,v2.z);
+            var line = makeLineSegment (point1, point2,'yellow');
+            scene.add(line);
+        }
+        );
+        $('#dwline').click(
+        function() {
+            var point1 = new THREE.Vector3 (w.x,w.y,w.z);
+            var w2=w.dot(2);
+            var point2 = new THREE.Vector3 (w2.x,w2.y,w2.z);
+            var line = makeLineSegment (point1, point2,'black');
+            scene.add(line);
+        }
+        );
+        $('#dvwline').click(
+        function() {
+            var point1 = new THREE.Vector3 (vxw.x,vxw.y,vxw.z);
+            var vxw2=w.dot(2);
+            var point2 = new THREE.Vector3 (vxw2.x,vxw2.y,vxw2.z);
+            var line = makeLineSegment (point1, point2,'orange');
+            scene.add(line);
+        }
+        );
+       
+    } 
+</script>
