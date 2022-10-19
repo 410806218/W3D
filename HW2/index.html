@@ -16,7 +16,7 @@
             </div>
     </div>
     <!-- 另外一個寫法<input type='text' id='WX' value='0' style="width:50%;" oninput = "OnInput (event)" onpropertychange="OnPropChanged (event)"><br><br> -->
-    <div id='WV' style="position:absolute; left:auto; top: 25%;  width:10%; height:auto;border-radius:10%;background-color:pink">
+    <div id='WV' style="position:absolute; left:auto; top: 33%;  width:10%; height:auto;border-radius:10%;background-color:pink">
         <BR>
         &nbsp &nbspW blackline<button  id='dwline' >drawline</button>
         <hr>
@@ -26,7 +26,7 @@
             Z<input type='text' id='WZ' value='0' style="width:50%;"onpropertychange="VWDOT()" oninput="VWDOT()"><br><br>
         </div>
     </div>
-    <div id='innprod' style="position:absolute; left:auto; top:45%;  width:10%; height:auto;border-radius:10%;background-color:pink">
+    <div id='innprod' style="position:absolute; left:auto; top:62%;  width:10%; height:auto;border-radius:10%;background-color:pink">
         <BR>
             &nbsp &nbsp inner product
         <hr>
@@ -92,6 +92,7 @@
       camera.position.x = 5;
       camera.position.y = 5;
       grid = new THREE.GridHelper(50,20,'red','white');
+      //let controls = new OrbitControls(camera, renderer.domElement);
       //grid.rotation.y = 25;
       //grid.rotation.x = 25;
       //通过Three.js类AxesHelper创建一个三维坐标系三个坐标轴的颜色分别为红绿蓝(RGB)，R、G、B三种颜色坐标轴是分别表示X、Y、Z轴，也就是红色轴是X轴，绿色轴是Y轴，蓝色轴是Z轴，你可以通过设置一个网格模型的.position属性去验证。
