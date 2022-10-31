@@ -190,9 +190,9 @@ raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1,
 
   const pointLight2 = new THREE.PointLight( 0xffffff, 1, 100,decay=0);
   pointLight2.position.set( 200,-200,-200 );
-  scene.add( pointLight2 );
+  //scene.add( pointLight2 );
   const pointLightHelper2 = new THREE.PointLightHelper( pointLight2, sphereSize );
-  scene.add( pointLightHelper2 );
+  //scene.add( pointLightHelper2 );
 
 //    let controls = new THREE.OrbitControls(camera, renderer.domElement);
 // //  let controls = new THREE.PointerLockControls( camera, document.body );
@@ -455,18 +455,53 @@ var ceil = new THREE.Mesh(new THREE.BoxGeometry(600, 1, 600), material);
 ceil.position.set(-0.75,25,20);
 ceil.rotation.y=Math.PI/2;
 scene.add (ceil);
+/////////////////////////////////////////////////////////////////
+// loader.load(
+//     "https://raw.githubusercontent.com/baronwatts/models/master/robber.glb", function(gltf) {
+
+//        gltf.scene.traverse( function( node ) {
+//           if ( node instanceof THREE.Mesh ) { 
+//             node.castShadow = true; 
+//             node.material.side = THREE.DoubleSide;
+//           }
+//         });  
+//       model = gltf.scene;
+//       model.scale.set(.35,.35,.35);
+//       scene.add(model);
+
+//       mixer = new THREE.AnimationMixer(model);
+//       mixer.clipAction(gltf.animations[1]).play();
+//   });
 ////////////////////////////////////////////////////////////////
-var loader = new THREE.GLTFLoader();
-
-loader.load( 'a3316pl-1bk_arte_lamp.glb', function ( gltf ) {
-
-	scene.add( gltf.scene );
-
+const color2 = new THREE.Color( 0x000000 );
+const color3 = new THREE.Color( 0xffffff );
+var artlamp = new THREE.GLTFLoader();
+//https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
+artlamp.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/artlamp.glb', function ( gltf ) {
+         gltf.scene.traverse( function( node ) {
+          if ( node instanceof THREE.Mesh ) { 
+            node.castShadow = true; 
+            node.material.side = THREE.DoubleSide;
+            node.material.color=color2;
+            node.material.emissive=color2;
+          }
+        });  
+  model= gltf.scene;
+  model.scale.set(0.05,0.05,0.05);
+  model.position.set(60,18,-140);
+  model.rotation.y=Math.PI;
+  scene.add(model);
 }, undefined, function ( error ) {
 
 	console.error( error );
 
 } );
+artlamplight = new THREE.SpotLight(0xffffff, 5, 250, Math.PI / 6, 0.974,0);
+artlamplight.position.set(60,18,-140);
+// artlamplight.target = (60,18,-140);
+  scene.add(artlamplight);
+  artlamplighthelper = new THREE.SpotLightHelper(artlamplight);
+  scene.add(artlamplighthelper);
 
 
 
