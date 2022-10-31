@@ -181,11 +181,11 @@ raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1,
 
   
   const pointLight = new THREE.PointLight( 0xffffff, 1, 100,decay=0);
-  pointLight.position.set( 200,200,200 );
+  pointLight.position.set( -50,0,-50 );
   scene.add( pointLight );
   const sphereSize = 50;
   const pointLightHelper = new THREE.PointLightHelper( pointLight, sphereSize );
-  scene.add( pointLightHelper );
+  //scene.add( pointLightHelper );
 
 
   const pointLight2 = new THREE.PointLight( 0xffffff, 1, 100,decay=0);
@@ -202,9 +202,11 @@ raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1,
 //////////////////////////////////////////////
 
 ////////////////////////////////////////////////
-  var floortexture= new THREE.TextureLoader().load("https://i.imgur.com/PcCtJIV.png");
+  var floortexture= new THREE.TextureLoader().load("https://i.imgur.com/jtrS95f.jpg");
+  
   floortexture.wrapS = THREE.RepeatWrapping;
   floortexture.wrapT = THREE.RepeatWrapping;
+  floortexture.repeat.set (50, 50)
   // var wallTex = new THREE.TextureLoader().load("https://i.imgur.com/F9Dli8Y.jpg");
   // var mat = new THREE.MeshLambertMaterial({
   //   map: woodTex
@@ -212,44 +214,8 @@ raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1,
 /////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-// let floorGeometry = new THREE.PlaneGeometry( 2000, 2000, 100, 100 );
-// 				floorGeometry.rotateX( - Math.PI / 2 );
 
-// 				// vertex displacement
-
-// 				let position = floorGeometry.attributes.position;
-
-// 				for ( let i = 0, l = position.count; i < l; i ++ ) {
-
-// 					vertex.fromBufferAttribute( position, i );
-
-// 					vertex.x += Math.random() * 20 - 10;
-// 					vertex.y += Math.random() * 2;
-// 					vertex.z += Math.random() * 20 - 10;
-
-// 					position.setXYZ( i, vertex.x, vertex.y, vertex.z );
-
-// 				}
-
-// 				floorGeometry = floorGeometry.toNonIndexed(); // ensure each face has unique vertices
-
-// 				position = floorGeometry.attributes.position;
-// 				const colorsFloor = [];
-
-// 				for ( let i = 0, l = position.count; i < l; i ++ ) {
-
-// 					color.setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-// 					colorsFloor.push( color.r, color.g, color.b );
-
-// 				}
-
-// 				floorGeometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colorsFloor, 3 ) );
-
-// 				const floorMaterial = new THREE.MeshBasicMaterial( { vertexColors: true } );
-
-// 				const floor = new THREE.Mesh( floorGeometry, floorMaterial );
-// 				scene.add( floor );
-var floor = new THREE.Mesh (new THREE.PlaneGeometry(50,50,1), new THREE.MeshBasicMaterial({
+var floor = new THREE.Mesh (new THREE.PlaneGeometry(600,600,1), new THREE.MeshBasicMaterial({
     map: floortexture,
     side: THREE.DoubleSide,
  
@@ -271,7 +237,7 @@ for ( let i = 0; i < officeoutwallPts.length; i ++ ) officeoutwallPts[ i ].multi
 let officeoutwallShape = new THREE.Shape( officeoutwallPts );
 let extrudeSettings = {
 	steps: 2,
-	depth: 25,
+	depth: 50,
 	bevelEnabled: false,
 	bevelThickness: 1,
 	bevelSize: 1,
@@ -279,11 +245,13 @@ let extrudeSettings = {
 	bevelSegments: 1
 };
    let geometry = new THREE.ExtrudeGeometry( officeoutwallShape,extrudeSettings );
-   let material = new THREE.MeshPhongMaterial( { color: 0xfff9eb ,side: THREE.DoubleSide} );
+   let material = new THREE.MeshStandardMaterial( { color: 0xfff9eb ,side: THREE.DoubleSide} );
+   material.castShadow=true;
+   material.receiveShadow=true;
    var  officeoutwall = new THREE.Mesh( geometry, material ) ;
   
    officeoutwall.rotation.x = Math.PI/2;
-   officeoutwall.position.set (-0.5,25,0); 
+   officeoutwall.position.set (-0.5,50,0); 
     scene.add( officeoutwall );
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     let officewallPts = [];
@@ -318,7 +286,7 @@ let extrudeSettings = {
     geometry=new THREE.ExtrudeGeometry( officewallShape,extrudeSettings );
     var  officewall = new THREE.Mesh( geometry, material ); 
     officewall.rotation.x = Math.PI/2;
-    officewall.position.set (-0.5,25,0); 
+    officewall.position.set (-0.5,50,0); 
     scene.add( officewall );
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 //   var texture = new THREE.TextureLoader().load("https://i.imgur.com/1PY6vGw.png");
@@ -358,7 +326,7 @@ let extrudeSettings = {
     geometry=new THREE.ExtrudeGeometry(GallerywallShape,extrudeSettings );
     var  Gallerywall = new THREE.Mesh( geometry, material ); 
     Gallerywall.rotation.x = Math.PI/2;
-    Gallerywall.position.set (-0.5,25,0); 
+    Gallerywall.position.set (-0.5,50,0); 
     scene.add( Gallerywall );
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     let storageroomPts = [];
@@ -386,7 +354,7 @@ let extrudeSettings = {
     geometry=new THREE.ExtrudeGeometry(storageroomShape,extrudeSettings );
     var  storageroom = new THREE.Mesh( geometry, material ); 
     storageroom.rotation.x = Math.PI/2;
-    storageroom.position.set (0,25,0); 
+    storageroom.position.set (0,50,0); 
     scene.add( storageroom );
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 let storageroom2Pts = [];
@@ -418,7 +386,7 @@ let storageroom2Pts = [];
     geometry=new THREE.ExtrudeGeometry(storageroom2Shape,extrudeSettings );
     var  storageroom2 = new THREE.Mesh( geometry, material ); 
     storageroom2.rotation.x = Math.PI/2;
-    storageroom2.position.set (0,25,0); 
+    storageroom2.position.set (0,50,0); 
     scene.add( storageroom2 );
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -444,15 +412,19 @@ scene.add (itemplate1);
 var itemplate2 = new THREE.Mesh(new THREE.CylinderGeometry(5,5,13,32), mat);
 itemplate2.position.set(0,0,-60);
 scene.add (itemplate2);
-var itemplate3 = new THREE.Mesh(new THREE.CylinderGeometry(5,5,13,32), mat);
-itemplate3.position.set(0,0,-90);
+var itemplate3 = new THREE.Mesh(new THREE.CylinderGeometry(5,5,5,32), mat);
+itemplate3.position.set(-112,0,-5.5);
 scene.add (itemplate3);
 var itemplate4 = new THREE.Mesh(new THREE.CylinderGeometry(20,20,13,32), mat);
-itemplate4.position.set(-60,0,-60);
+itemplate4.position.set(-70,0,-95);
 scene.add (itemplate4);
+
+var itemplate5 = new THREE.Mesh(new THREE.CylinderGeometry(5,5,13,32), mat);
+itemplate5.position.set(-50,0,100);
+scene.add (itemplate5);
 ////////////////////////////////////////////////
 var ceil = new THREE.Mesh(new THREE.BoxGeometry(600, 1, 600), material);
-ceil.position.set(-0.75,25,20);
+ceil.position.set(-0.75,50,20);
 ceil.rotation.y=Math.PI/2;
 scene.add (ceil);
 /////////////////////////////////////////////////////////////////
@@ -479,8 +451,9 @@ var artlamp = new THREE.GLTFLoader();
 //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
 artlamp.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/artlamp.glb', function ( gltf ) {
          gltf.scene.traverse( function( node ) {
-          if ( node instanceof THREE.Mesh ) { 
-            node.castShadow = true; 
+          if ( node instanceof THREE.Mesh) { 
+            node.material.castShadow = true; 
+          
             node.material.side = THREE.DoubleSide;
             node.material.color=color2;
             node.material.emissive=color2;
@@ -488,7 +461,7 @@ artlamp.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/artlam
         });  
   model= gltf.scene;
   model.scale.set(0.05,0.05,0.05);
-  model.position.set(60,18,-140);
+  model.position.set(60,40,-135);
   model.rotation.y=Math.PI;
   scene.add(model);
 }, undefined, function ( error ) {
@@ -496,12 +469,19 @@ artlamp.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/artlam
 	console.error( error );
 
 } );
-artlamplight = new THREE.SpotLight(0xffffff, 5, 250, Math.PI / 6, 0.974,0);
-artlamplight.position.set(60,18,-140);
-// artlamplight.target = (60,18,-140);
-  scene.add(artlamplight);
-  artlamplighthelper = new THREE.SpotLightHelper(artlamplight);
-  scene.add(artlamplighthelper);
+artlamplight = new THREE.SpotLight(0xffffff, 5, 20, Math.PI/5, 0.974,1);
+artlamplight.position.set(60,40,-135);
+artlamplight.castShadow=true;
+// artlamplight.shadow.mapSize.width = 512; // default
+// artlamplight.shadow.mapSize.height = 512; // default
+// artlamplight.shadow.camera.near = 0.5; // default
+// artlamplight.shadow.camera.far = 500; // default
+// artlamplight.shadow.focus = 1; // default
+  //artlamplight.target = atlas.model;
+  // artlamplight.target = model;
+  // scene.add(artlamplight);  
+  // artlamplighthelper = new THREE.SpotLightHelper(artlamplight);
+  // scene.add(artlamplighthelper);
 
 
 
@@ -510,11 +490,85 @@ artlamplight.position.set(60,18,-140);
 
 
 ///////////////////////////////////////////////////////////////////
+var atlas = new THREE.GLTFLoader();
+//https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
+atlas.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/atlas_holding_the_earth.glb', function ( gltf ) {
+         gltf.scene.traverse( function( node ) {
+          if ( node instanceof THREE.Mesh ) { 
+            node.castShadow = true; 
+            node.material.side = THREE.DoubleSide;
+            //node.material.color=color2;
+            //node.material.emissive=color2;
+          }
+        });  
+      
+  model= gltf.scene;
+
+  model.scale.set(0.2,0.2,0.2);
+  model.position.set(-70,6.5,-97);
+  model.rotation.y=Math.PI;
+  scene.add(model);
+    ///////////////////////////
+  // artlamplight.target = model;
+  // scene.add(artlamplight);  
+  // artlamplighthelper = new THREE.SpotLightHelper(artlamplight);
+  // scene.add(artlamplighthelper);
+  ////////////////////////////
+}, undefined, function ( error ) {
+
+	console.error( error );
+
+} );
+
+//////////////////////////////////////////////////////////////////
+var pcf = new THREE.GLTFLoader();
+//https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
+pcf.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/fancy_picture_frame.glb', function ( gltf ) {
+         gltf.scene.traverse( function( node ) {
+          if ( node instanceof THREE.Mesh ) { 
+            node.castShadow = true; 
+            node.material.side = THREE.DoubleSide;
+            //node.material.color=color2;
+            //node.material.emissive=color2;
+          }
+        });  
+
+  model= gltf.scene;
+  model.scale.set(20,20,20);
+  model.position.set(60,25,-143.5);
+  model.rotation.y=Math.PI/2;
+  scene.add(model);
+
+  ///////////////////
+  artlamplight.target = model;
+  scene.add(artlamplight);  
+  artlamplighthelper = new THREE.SpotLightHelper(artlamplight);
+  scene.add(artlamplighthelper);
+      /////////////
+}, undefined, function ( error ) {
+
+	console.error( error );
+
+} );
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////
         renderer = new THREE.WebGLRenderer( { antialias: true } );
         renderer.setClearColor(0x888888);
 				renderer.setPixelRatio( window.devicePixelRatio );
@@ -587,7 +641,7 @@ function animate() {
 prevTime = time;
 
 renderer.render( scene, camera );
-
+artlamplighthelper.update();
 }
 </script>
 </body>
