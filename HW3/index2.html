@@ -171,15 +171,6 @@ document.addEventListener( 'keydown', onKeyDown );
 document.addEventListener( 'keyup', onKeyUp );
 raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
 /////////////////////////
-
-
-
-
-
-
-
-
-  
   const pointLight = new THREE.PointLight( 0xffffff, 1, 100,decay=0);
   pointLight.position.set( -50,0,-50 );
   scene.add( pointLight );
@@ -542,8 +533,108 @@ pcf.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/fancy_pict
   ///////////////////
   artlamplight.target = model;
   scene.add(artlamplight);  
-  artlamplighthelper = new THREE.SpotLightHelper(artlamplight);
-  scene.add(artlamplighthelper);
+
+      /////////////
+}, undefined, function ( error ) {
+
+	console.error( error );
+
+} );
+artlamplighthelper = new THREE.SpotLightHelper(artlamplight);
+scene.add(artlamplighthelper);
+//////////////////////////////////////////////////////////////////
+chandelierlight = new THREE.PointLight( 0xffffff, 1, 100,decay=1);
+chandelierlight.position.set(0,30,0);
+
+scene.add(chandelierlight);
+chandelierhelper = new THREE.PointLightHelper(chandelierlight);
+  scene.add(chandelierhelper);
+
+///////////////////////////////////////////////////////////////////
+var  chandelier= new THREE.GLTFLoader();
+//https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
+chandelier.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/lamp_chandelier_free_model.glb', function ( gltf ) {
+         gltf.scene.traverse( function( node ) {
+          if ( node instanceof THREE.Mesh ) { 
+            node.castShadow = true; 
+            node.material.side = THREE.DoubleSide;
+            node.material.color=color3;
+            //node.material.emissive=color2;
+          }
+        });  
+
+  model= gltf.scene;
+  model.scale.set(15,15,15);
+  model.position.set(0,35,0);
+  model.rotation.y=Math.PI/2;
+  scene.add(model);
+  
+  ///////////////////
+  // artlamplight.target = model;
+  // scene.add(artlamplight);  
+  // artlamplighthelper = new THREE.SpotLightHelper(artlamplight);
+  // scene.add(artlamplighthelper);
+      /////////////
+}, undefined, function ( error ) {
+
+	console.error( error );
+
+} );
+////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+var  the_discobolus_of_myron= new THREE.GLTFLoader();
+//https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
+the_discobolus_of_myron.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/the_discobolus_of_myron.glb', function ( gltf ) {
+         gltf.scene.traverse( function( node ) {
+          if ( node instanceof THREE.Mesh ) { 
+            node.castShadow = true; 
+            node.material.side = THREE.DoubleSide;
+            //node.material.color=color3;
+            //node.material.emissive=color2;
+          }
+        });  
+
+  model= gltf.scene;
+  model.scale.set(10,10,10);
+  model.position.set(-112,2.5,-5.7);
+  model.rotation.y=Math.PI/2;
+  scene.add(model);
+  
+  ///////////////////
+  // artlamplight.target = model;
+  // scene.add(artlamplight);  
+  // artlamplighthelper = new THREE.SpotLightHelper(artlamplight);
+  // scene.add(artlamplighthelper);
+      /////////////
+}, undefined, function ( error ) {
+
+	console.error( error );
+
+} );
+//////////////////////////////////////////////////////////////
+var  nazuna_nanakusa_fanart_sculpt= new THREE.GLTFLoader();
+//https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
+nazuna_nanakusa_fanart_sculpt.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/der_denker.glb', function ( gltf ) {
+         gltf.scene.traverse( function( node ) {
+          if ( node instanceof THREE.Mesh ) { 
+            node.castShadow = true; 
+            node.material.side = THREE.DoubleSide;
+            //node.material.color=color3;
+            //node.material.emissive=color2;
+          }
+        });  
+
+  model= gltf.scene;
+  model.scale.set(0.1,0.1,0.1);
+  model.position.set(0,10,0);
+  model.rotation.y=Math.PI/2;
+  scene.add(model);
+  
+  ///////////////////
+  // artlamplight.target = model;
+  // scene.add(artlamplight);  
+  // artlamplighthelper = new THREE.SpotLightHelper(artlamplight);
+  // scene.add(artlamplighthelper);
       /////////////
 }, undefined, function ( error ) {
 
@@ -551,24 +642,7 @@ pcf.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/fancy_pict
 
 } );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
         renderer = new THREE.WebGLRenderer( { antialias: true } );
         renderer.setClearColor(0x888888);
 				renderer.setPixelRatio( window.devicePixelRatio );
@@ -642,6 +716,7 @@ prevTime = time;
 
 renderer.render( scene, camera );
 artlamplighthelper.update();
+//chandelierlighthelper.update();
 }
 </script>
 </body>
