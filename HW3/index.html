@@ -2,6 +2,7 @@
 <script src="https://threejs.org/build/three.min.js"></script>
 <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
 <script src="https://threejs.org/examples/js/controls/PointerLockControls.js"></script>
+<script src="https://unpkg.com/three@0.129.0/examples/js/loaders/GLTFLoader.js"></script>
 <script>
 
 var camera, scene, renderer;
@@ -278,7 +279,35 @@ var ceil = new THREE.Mesh(new THREE.BoxGeometry(300, 1, 300), material);
 ceil.position.set(-0.75,25,20);
 ceil.rotation.y=Math.PI/2;
 scene.add (ceil);
+var  nazuna_nanakusa_fanart_sculpt= new THREE.GLTFLoader();
+//https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
+nazuna_nanakusa_fanart_sculpt.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/der_denker.glb', function ( gltf ) {
+         gltf.scene.traverse( function( node ) {
+          if ( node instanceof THREE.Mesh ) { 
+            node.castShadow = true; 
+            node.material.side = THREE.DoubleSide;
+            //node.material.color=color3;
+            //node.material.emissive=color2;
+          }
+        });  
 
+  model= gltf.scene;
+  model.scale.set(5,5,5);
+  model.position.set(0,10,0);
+  model.rotation.y=Math.PI/2;
+  scene.add(model);
+  
+  ///////////////////
+  // artlamplight.target = model;
+  // scene.add(artlamplight);  
+  // artlamplighthelper = new THREE.SpotLightHelper(artlamplight);
+  // scene.add(artlamplighthelper);
+      /////////////
+}, undefined, function ( error ) {
+
+	console.error( error );
+
+} );
 
 
 
@@ -290,6 +319,6 @@ function animate() {
 
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
-  spotLightHelper.update();
+  //spotLightHelper.update();
 }
 </script>
