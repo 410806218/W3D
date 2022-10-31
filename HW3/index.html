@@ -1,0 +1,295 @@
+<div id="info">minimal three.js</div>
+<script src="https://threejs.org/build/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script src="https://threejs.org/examples/js/controls/PointerLockControls.js"></script>
+<script>
+
+var camera, scene, renderer;
+
+init();
+animate();
+
+function init() {
+
+  scene = new THREE.Scene();
+
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x888888);
+  document.body.appendChild(renderer.domElement);
+
+  camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
+  camera.position.z = 500; // camera at (0,0,500)
+  
+  const pointLight = new THREE.PointLight( 0xffffff, 1, 100,decay=0);
+  pointLight.position.set( 200,200,200 );
+  
+  scene.add( pointLight );
+  const sphereSize = 50;
+  const pointLightHelper = new THREE.PointLightHelper( pointLight, sphereSize );
+  scene.add( pointLightHelper );
+
+
+  const pointLight2 = new THREE.PointLight( 0xffffff, 1, 100,decay=0);
+  pointLight2.position.set( 200,-200,-200 );
+  scene.add( pointLight2 );
+  const pointLightHelper2 = new THREE.PointLightHelper( pointLight2, sphereSize );
+  scene.add( pointLightHelper2 );
+
+   let controls = new THREE.OrbitControls(camera, renderer.domElement);
+//  let controls = new THREE.PointerLockControls( camera, document.body );
+//////////////////////////////////////////////////
+  var gridXZ = new THREE.GridHelper(100, 100, 'red', 'black');
+  scene.add(gridXZ);
+//////////////////////////////////////////////
+// let loader = new THREE.TextureLoader()
+//   loader.crossOrigin = '';
+
+//   texture = loader.load('https://i.imgur.com/bv24XBd.jpg?1');
+
+//   texture.wrapS = THREE.RepeatWrapping;
+//   texture.wrapT = THREE.RepeatWrapping;
+// 	texture.repeat.set(2, 2);
+  
+//   mesh = new THREE.Mesh(new THREE.PlaneGeometry(500, 500), 
+//   	new THREE.MeshBasicMaterial({map: texture}))
+//   mesh.rotation.x = -Math.PI / 2;
+//   scene.add(mesh);
+////////////////////////////////////////////////
+  var floortexture= new THREE.TextureLoader().load("https://i.imgur.com/PcCtJIV.png");
+  floortexture.wrapS = THREE.RepeatWrapping;
+  floortexture.wrapT = THREE.RepeatWrapping;
+  // var wallTex = new THREE.TextureLoader().load("https://i.imgur.com/F9Dli8Y.jpg");
+  // var mat = new THREE.MeshLambertMaterial({
+  //   map: woodTex
+  // });
+
+  var floor = new THREE.Mesh (new THREE.PlaneGeometry(50,50,1), new THREE.MeshBasicMaterial({
+    map: floortexture,
+    side: THREE.DoubleSide,
+ 
+  }));
+  floor.rotation.x = -Math.PI/2;
+  scene.add (floor);
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  var box1 = new THREE.Mesh (new THREE.BoxGeometry (2,2,9), new THREE.MeshPhongMaterial({color:'black'}));
+//   box1.position.set (8.25,2,-2);
+//   box1.material.emissive = new THREE.Color('red');
+//   scene.add (box1); 
+   ////////////////////////////////////////////////////////////////////////////////////////////////////////
+let officeoutwallPts = [];
+officeoutwallPts.push( new THREE.Vector2( 8.5,3 ) );
+officeoutwallPts.push( new THREE.Vector2( 8.5,-6 ) );
+officeoutwallPts.push( new THREE.Vector2( 11, -11 ) );
+officeoutwallPts.push( new THREE.Vector2( 12, -11 ) );
+officeoutwallPts.push( new THREE.Vector2( 12, -9 ) ); 
+officeoutwallPts.push( new THREE.Vector2( 9.5,-6  ) );
+officeoutwallPts.push( new THREE.Vector2( 9.5,3 ) );
+officeoutwallPts.push( new THREE.Vector2( 8.5,3 ) );
+for ( let i = 0; i < officeoutwallPts.length; i ++ ) officeoutwallPts[ i ].multiplyScalar( 5 );
+let officeoutwallShape = new THREE.Shape( officeoutwallPts );
+let extrudeSettings = {
+	steps: 2,
+	depth: 25,
+	bevelEnabled: false,
+	bevelThickness: 1,
+	bevelSize: 1,
+	bevelOffset: 0,
+	bevelSegments: 1
+};
+   let geometry = new THREE.ExtrudeGeometry( officeoutwallShape,extrudeSettings );
+   let material = new THREE.MeshPhongMaterial( { color: 0xfff9eb ,side: THREE.DoubleSide} );
+   var  officeoutwall = new THREE.Mesh( geometry, material ) ;
+  
+   officeoutwall.rotation.x = Math.PI/2;
+   officeoutwall.position.set (-0.5,13,0); 
+    scene.add( officeoutwall );
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    let officewallPts = [];
+    let x=0,y=0;
+    officewallPts.push( new THREE.Vector2( x+12, y-11 ) );
+    officewallPts.push( new THREE.Vector2( x+12, y-7 ) );
+    officewallPts.push( new THREE.Vector2( x+12.5, y-7 ) );
+    officewallPts.push( new THREE.Vector2( x+12.5, y-10.5 ) );
+    officewallPts.push( new THREE.Vector2( x+20.5, y-10.5 ) );
+    officewallPts.push( new THREE.Vector2( x+20.5, y-8.5 ) );
+    officewallPts.push( new THREE.Vector2( x+21, y-8.5 ) );
+    officewallPts.push( new THREE.Vector2( x+21, y-10.5 ) );
+    officewallPts.push( new THREE.Vector2( x+29, y-10.5 ) );
+    //轉彎處
+    officewallPts.push( new THREE.Vector2( x+29, y+3 ) );
+    officewallPts.push( new THREE.Vector2( x+21, y+3 ) );
+    officewallPts.push( new THREE.Vector2( x+21, y-6 ) );
+    officewallPts.push( new THREE.Vector2( x+20.5, y-6 ) );
+    officewallPts.push( new THREE.Vector2( x+20.5, y+3 ) );
+  ////
+    officewallPts.push( new THREE.Vector2( x+12.5, y+3 ) );
+    officewallPts.push( new THREE.Vector2( x+12.5, y-1 ) );
+    officewallPts.push( new THREE.Vector2( x+11.5, y-1 ) );
+    officewallPts.push( new THREE.Vector2( x+11.5, y+3.5 ) );
+  ///
+    officewallPts.push( new THREE.Vector2( x+30, y+3.5 ) );
+    officewallPts.push( new THREE.Vector2( x+30, y-11 ) );
+    officewallPts.push( new THREE.Vector2( x+12, y-11 ) );
+  /////
+    for ( let i = 0; i < officewallPts.length; i ++ ) officewallPts[ i ].multiplyScalar( 5 );
+    let officewallShape = new THREE.Shape( officewallPts );
+    geometry=new THREE.ExtrudeGeometry( officewallShape,extrudeSettings );
+    var  officewall = new THREE.Mesh( geometry, material ); 
+    officewall.rotation.x = Math.PI/2;
+    officewall.position.set (-0.5,25,0); 
+    scene.add( officewall );
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+//   var texture = new THREE.TextureLoader().load("https://i.imgur.com/1PY6vGw.png");
+//   var picture = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), new THREE.MeshBasicMaterial({
+//     map: texture,
+//     side: THREE.DoubleSide,
+//     transparent: true
+//   }));
+//   scene.add(picture);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    let GallerywallPts = [];
+    
+    GallerywallPts.push( new THREE.Vector2( x-30, y-30 ) );
+    GallerywallPts.push( new THREE.Vector2( x+30, y-30 ) );
+    GallerywallPts.push( new THREE.Vector2( x+30, y+30 ) );
+    GallerywallPts.push( new THREE.Vector2( x-30, y+30 ) );
+    GallerywallPts.push( new THREE.Vector2( x-30, y-30 ) );
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+    let GallerywallholePts = [];
+    GallerywallholePts.push( new THREE.Vector2( x-29, y-29 ) );
+    GallerywallholePts.push( new THREE.Vector2( x+29, y-29 ) );
+    GallerywallholePts.push( new THREE.Vector2( x+29, y+29 ) );
+    GallerywallholePts.push( new THREE.Vector2( x-29, y+29 ) );
+    GallerywallholePts.push( new THREE.Vector2( x-29, y-29 ) );
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+    for ( let i = 0; i < GallerywallPts.length; i ++ ) GallerywallPts[ i ].multiplyScalar( 5 );
+    let GallerywallShape = new THREE.Shape( GallerywallPts );
+    for ( let i = 0; i < GallerywallholePts.length; i ++ ) GallerywallholePts[ i ].multiplyScalar( 5 );
+    let GallerywallholeShape = new THREE.Shape( GallerywallholePts );
+    GallerywallShape.holes.push(GallerywallholeShape);
+    geometry=new THREE.ExtrudeGeometry(GallerywallShape,extrudeSettings );
+    var  Gallerywall = new THREE.Mesh( geometry, material ); 
+    Gallerywall.rotation.x = Math.PI/2;
+    Gallerywall.position.set (-0.5,13,0); 
+    scene.add( Gallerywall );
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    let storageroomPts = [];
+  
+    storageroomPts.push( new THREE.Vector2( x-0.2, y+10 ) );
+    storageroomPts.push( new THREE.Vector2( x-0.2, y+30 ) );
+    storageroomPts.push( new THREE.Vector2( x+0.2, y+30 ) );
+    storageroomPts.push( new THREE.Vector2( x+6.5 ,y+30 ) );
+    ////
+    storageroomPts.push( new THREE.Vector2( x+6.5 ,y+17.5 ) );
+    storageroomPts.push( new THREE.Vector2( x+6 ,y+17.5 ) );
+    storageroomPts.push( new THREE.Vector2( x+6 ,y+29.5 ) );
+    storageroomPts.push( new THREE.Vector2( x+0.2 ,y+29.5 ) );
+    ///
+
+    storageroomPts.push( new THREE.Vector2( x+0.2, y+10.5 ) );
+    /////
+    storageroomPts.push( new THREE.Vector2( x+6, y+10.5 ) );
+    storageroomPts.push( new THREE.Vector2( x+6, y+13 ) );
+    storageroomPts.push( new THREE.Vector2( x+6.5 ,y+13 ) );
+    storageroomPts.push( new THREE.Vector2( x+6.5 ,y+10 ) );
+    storageroomPts.push( new THREE.Vector2( x-0.2 ,y+10 ) );
+    for ( let i = 0; i < storageroomPts.length; i ++ ) storageroomPts[ i ].multiplyScalar( 5 );
+    let storageroomShape = new THREE.Shape( storageroomPts );
+    geometry=new THREE.ExtrudeGeometry(storageroomShape,extrudeSettings );
+    var  storageroom = new THREE.Mesh( geometry, material ); 
+    storageroom.rotation.x = Math.PI/2;
+    storageroom.position.set (0,13,0); 
+    scene.add( storageroom );
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+let storageroom2Pts = [];
+  
+  storageroom2Pts.push( new THREE.Vector2( x+9, y+10 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+9, y+15 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+9.5, y+15 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+9.5, y+10.5 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+14.5, y+10.5 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+14.5, y+19.5 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+9.5, y+19.5 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+9.5, y+19 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+9, y+19 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+9, y+20.5 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+9.5, y+20.5 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+9.5 ,y+20 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+14.5, y+20 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+14.5, y+29.5 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+9.5, y+29.5 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+9.5, y+23.5 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+9, y+23.5 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+9, y+30 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+15, y+30 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+15, y+10 ) );
+  storageroom2Pts.push( new THREE.Vector2( x+9, y+10 ) );
+
+  for ( let i = 0; i < storageroom2Pts.length; i ++ ) storageroom2Pts[ i ].multiplyScalar( 5 );
+    let storageroom2Shape = new THREE.Shape( storageroom2Pts );
+    geometry=new THREE.ExtrudeGeometry(storageroom2Shape,extrudeSettings );
+    var  storageroom2 = new THREE.Mesh( geometry, material ); 
+    storageroom2.rotation.x = Math.PI/2;
+    storageroom2.position.set (0,13,0); 
+    scene.add( storageroom2 );
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+var movewall1 = new THREE.Mesh(new THREE.BoxGeometry(40, 13, 0.5), material);
+movewall1.position.set(-125.5,6.5,0);
+scene.add (movewall1);
+var movewall2 = new THREE.Mesh(new THREE.BoxGeometry(40, 13, 0.5), material);
+movewall2.position.set(-70.5,6.5,0);
+scene.add (movewall2);
+var movewall3 = new THREE.Mesh(new THREE.BoxGeometry(40, 13, 0.5), material);
+movewall3.position.set(-0.75,6.5,20);
+movewall3.rotation.y=Math.PI/2;
+scene.add (movewall3);
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////
+  var itemTex = new THREE.TextureLoader().load("https://i.imgur.com/14eJxbM.jpg");
+  var mat = new THREE.MeshLambertMaterial({
+    map: itemTex
+  });
+
+var itemplate1 = new THREE.Mesh(new THREE.CylinderGeometry(5,5,13,32), mat);
+itemplate1.position.set(0,0,-30);
+scene.add (itemplate1);
+var itemplate2 = new THREE.Mesh(new THREE.CylinderGeometry(5,5,13,32), mat);
+itemplate2.position.set(0,0,-60);
+scene.add (itemplate2);
+var itemplate3 = new THREE.Mesh(new THREE.CylinderGeometry(5,5,13,32), mat);
+itemplate3.position.set(0,0,-90);
+scene.add (itemplate3);
+var itemplate4 = new THREE.Mesh(new THREE.CylinderGeometry(20,20,13,32), mat);
+itemplate4.position.set(-60,0,-60);
+scene.add (itemplate4);
+///////////////////////////////////////////////////////////
+var ceil = new THREE.Mesh(new THREE.BoxGeometry(300, 1, 300), material);
+ceil.position.set(-0.75,25,20);
+ceil.rotation.y=Math.PI/2;
+scene.add (ceil);
+
+
+
+
+
+
+}
+
+function animate() {
+
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+  spotLightHelper.update();
+}
+</script>
