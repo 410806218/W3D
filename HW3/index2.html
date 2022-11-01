@@ -612,37 +612,10 @@ the_discobolus_of_myron.load( 'https://raw.githubusercontent.com/410806218/W3D/m
 
 } );
 //////////////////////////////////////////////////////////////
-var  nazuna_nanakusa_fanart_sculpt= new THREE.GLTFLoader();
-//https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
-nazuna_nanakusa_fanart_sculpt.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/der_denker.glb', function ( gltf ) {
-         gltf.scene.traverse( function( node ) {
-          if ( node instanceof THREE.Mesh ) { 
-            node.castShadow = true; 
-            node.material.side = THREE.DoubleSide;
-            //node.material.color=color3;
-            //node.material.emissive=color2;
-          }
-        });  
 
-  model= gltf.scene;
-  model.scale.set(0.1,0.1,0.1);
-  model.position.set(0,10,0);
-  model.rotation.y=Math.PI/2;
-  scene.add(model);
-  
-  ///////////////////
-  // artlamplight.target = model;
-  // scene.add(artlamplight);  
-  // artlamplighthelper = new THREE.SpotLightHelper(artlamplight);
-  // scene.add(artlamplighthelper);
-      /////////////
-}, undefined, function ( error ) {
 
-	console.error( error );
 
-} );
-
-//////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
         renderer = new THREE.WebGLRenderer( { antialias: true } );
         renderer.setClearColor(0x888888);
 				renderer.setPixelRatio( window.devicePixelRatio );
