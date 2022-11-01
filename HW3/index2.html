@@ -440,7 +440,7 @@ const color2 = new THREE.Color( 0x000000 );
 const color3 = new THREE.Color( 0xffffff );
 var artlamp = new THREE.GLTFLoader();
 //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
-artlamp.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/artlamp.glb', function ( gltf ) {
+artlamp.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/artlamp.glb', function ( gltf ) {
          gltf.scene.traverse( function( node ) {
           if ( node instanceof THREE.Mesh) { 
             node.material.castShadow = true; 
@@ -483,7 +483,7 @@ artlamplight.castShadow=true;
 ///////////////////////////////////////////////////////////////////
 var atlas = new THREE.GLTFLoader();
 //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
-atlas.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/atlas_holding_the_earth.glb', function ( gltf ) {
+atlas.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/atlas_holding_the_earth.glb', function ( gltf ) {
          gltf.scene.traverse( function( node ) {
           if ( node instanceof THREE.Mesh ) { 
             node.castShadow = true; 
@@ -514,7 +514,7 @@ atlas.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/atlas_ho
 //////////////////////////////////////////////////////////////////
 var pcf = new THREE.GLTFLoader();
 //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
-pcf.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/fancy_picture_frame.glb', function ( gltf ) {
+pcf.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/fancy_picture_frame.glb', function ( gltf ) {
          gltf.scene.traverse( function( node ) {
           if ( node instanceof THREE.Mesh ) { 
             node.castShadow = true; 
@@ -553,7 +553,7 @@ chandelierhelper = new THREE.PointLightHelper(chandelierlight);
 ///////////////////////////////////////////////////////////////////
 var  chandelier= new THREE.GLTFLoader();
 //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
-chandelier.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/lamp_chandelier_free_model.glb', function ( gltf ) {
+chandelier.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/lamp_chandelier_free_model.glb', function ( gltf ) {
          gltf.scene.traverse( function( node ) {
           if ( node instanceof THREE.Mesh ) { 
             node.castShadow = true; 
@@ -584,7 +584,7 @@ chandelier.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/lam
 ///////////////////////////////////////////////////////////////////
 var  the_discobolus_of_myron= new THREE.GLTFLoader();
 //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
-the_discobolus_of_myron.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/the_discobolus_of_myron.glb', function ( gltf ) {
+the_discobolus_of_myron.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/the_discobolus_of_myron.glb', function ( gltf ) {
          gltf.scene.traverse( function( node ) {
           if ( node instanceof THREE.Mesh ) { 
             node.castShadow = true; 
