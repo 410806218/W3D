@@ -23,8 +23,8 @@
   <div style='background-color:pink'>
     Color Selector:
     <br>
-    <input type=radio name='c' value='red'><img src="https://i.imgur.com/mGdIosi.png"   width="5%" height="5%" border="0" align="absmiddle">table
-    <input type=radio name='c' value='blue'>chair
+    <input type=radio name='c' value='red' id="red"><img src="https://i.imgur.com/mGdIosi.png"   width="5%" height="5%" border="0" align="absmiddle">table
+    <input type=radio name='c' value='blue'id="blue">chair
   </div>
   <br>
   <button id='clear' style="width:45%">Clear</button>
@@ -51,7 +51,7 @@
   var pickplane;
   var cyl;
   var spheres = [];
-  
+  var mode=0;
   init();
   animate();
   
@@ -74,7 +74,19 @@
     localStorage.setItem('stateStr', JSON.stringify(states));
   
   });
-  
+
+  $('#red').click(function() {
+    
+     mode=0;
+
+  });
+  $('#blue').click(function() {
+    
+     mode=1;
+
+  });
+
+
   $('#restore').click(function() {
   
     var states = JSON.parse(localStorage.getItem('stateStr'));
@@ -88,19 +100,91 @@
   
   function buildSphere(rad, pos) {
   
-    var sphere = new THREE.Mesh(new THREE.SphereGeometry(rad, 20, 20), new THREE.MeshNormalMaterial());
+    //var sphere = new THREE.Mesh(new THREE.SphereGeometry(rad, 20, 20), new THREE.MeshNormalMaterial());
+   ////////////////////////////////////////  
+   if(mode==0){
+    var pcf = new THREE.GLTFLoader();
+    //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
+    pcf.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW4/sofa_chair.glb', function ( gltf ) {
+            gltf.scene.traverse( function( node ) {
+              if ( node instanceof THREE.Mesh ) { 
+                node.castShadow = true; 
+                node.material.side = THREE.DoubleSide;
+                //node.material.color=color2;
+                //node.material.emissive=color2;
+              }
+            });  
+
+      sphere= gltf.scene;
+      
+      sphere.rotation.y=Math.PI/2;
+      sphere.scale.set(20,20,20);
+      var prop = {
+        rad: rad,
+        pos: [pos.x, pos.z]
+      };
+      console.log(prop);
+      sphere.name = JSON.stringify(prop);
+      console.log(sphere.name);
+    
+      spheres.push(sphere);
+      sphere.position.copy(pos);
+
+
+      scene.add(sphere);
+    }, undefined, function ( error ) {
+
+      console.error( error );
+
+    } );
+  }
+  else if(mode==1){    
+    var table = new THREE.GLTFLoader();
+    //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
+    table.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW4/wood_table_bench.glb', function ( gltf ) {
+            gltf.scene.traverse( function( node ) {
+              if ( node instanceof THREE.Mesh ) { 
+                //node.castShadow = true; 
+                //node.material.side = THREE.DoubleSide;
+                //node.material.color=color2;
+                //node.material.emissive=color2;
+              }
+            });  
+
+      sphere2= gltf.scene;
+      
+      sphere2.rotation.y=Math.PI/2;
+      sphere2.scale.set(20,20,20);
+      var prop = {
+        rad: rad,
+        pos: [pos.x, pos.z]
+      };
+      console.log(prop);
+      sphere2.name = JSON.stringify(prop);
+      console.log(sphere2.name);
+    
+      spheres.push(sphere2);
+      sphere2.position.copy(pos);
+
+
+      scene.add(sphere2);
+    }, undefined, function ( error ) {
+
+      console.error( error );
+
+    } );
+  }
+    ////////////////////////////////////////////////
+//    var prop = {
+//      rad: rad,
+//      pos: [pos.x, pos.z]
+//    };
+//    console.log(prop);
+//    sphere.name = JSON.stringify(prop);
+//    console.log(sphere.name);
   
-    scene.add(sphere);
-    var prop = {
-      rad: rad,
-      pos: [pos.x, pos.z]
-    };
-    console.log(prop);
-    sphere.name = JSON.stringify(prop);
-    console.log(sphere.name);
-  
-    spheres.push(sphere);
-    sphere.position.copy(pos);
+//    spheres.push(sphere);
+//    sphere.position.copy(pos);
   
   }
   
@@ -119,6 +203,32 @@
     camera = new THREE.PerspectiveCamera(50, ww / hh, 1, 1000);
     camera.position.z = 500;
     scene.add(camera);
+    ///////////////////////////////////////////////////
+    
+    artlamplight2 = new THREE.SpotLight(0xffffff, 5, 5000, Math.PI/5, 1,0);
+    artlamplight2.position.set(0,500,0);
+    artlamplight2.castShadow=true;
+    scene.add(artlamplight2);
+    ////////////////////////////////////////////////////
+    artlamplight3 = new THREE.SpotLight(0xffffff, 5, 5000, Math.PI/5, 1,0);
+    artlamplight3.position.set(500,0,500);
+    artlamplight3.castShadow=true;
+    scene.add(artlamplight3);
+    ///////////////////////////////////////////////
+    artlamplight4 = new THREE.SpotLight(0xffffff, 5, 5000, Math.PI/5, 1,0);
+    artlamplight4.position.set(0,500,500);
+    artlamplight4.castShadow=true;
+    scene.add(artlamplight4);
+    /////////////////////////////////////////////////
+    artlamplight5 = new THREE.SpotLight(0xffffff, 5, 5000, Math.PI/5, 1,0);
+    artlamplight5.position.set(0,-500,500);
+    artlamplight5.castShadow=true;
+    scene.add(artlamplight5);
+    ///////////////////////////////////////////////
+    artlamplight6 = new THREE.SpotLight(0xffffff, 5, 5000, Math.PI/5, 1,0);
+    artlamplight6.position.set(-500,500,500);
+    artlamplight6.castShadow=true;
+    scene.add(artlamplight6);
     ////////////////////////////////////////////////////
     var loader = new THREE.TextureLoader();
     var floorGroup = new THREE.Group();
@@ -133,7 +243,7 @@
     scene.add (floorGroup);
     
     floorGroup.rotation.x = -Math.PI/2;
-////////////////////////////////////////  
+
   
     var cyl_geom = new THREE.RingGeometry(5, 10, 32);
     var cyl_mat = new THREE.MeshBasicMaterial({
@@ -152,8 +262,8 @@
     scene.add(pickplane);
     pickplane.material.visible = false;
   
-    //var gridXZ = new THREE.GridHelper(200, 20, 'red', 'white');
-    //scene.add(gridXZ);
+    var gridXZ = new THREE.GridHelper(200, 20, 'red', 'white');
+    scene.add(gridXZ);
   
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     window.addEventListener('resize', onWindowResize, false);
