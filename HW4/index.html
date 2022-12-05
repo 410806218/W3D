@@ -5,41 +5,103 @@
 <script src="https://unpkg.com/three@0.129.0/examples/js/loaders/GLTFLoader.js"></script>
 
 
-<h1 style="text-align:center"> Homework 4 Demo </h1>
+<h1 style="text-align:center"> Homework 4 Click the Selector first and Use WASD to control the object direction. </h1>
 <hr>
 <div id="container" style="float:left; margin:3px; width:60vw; height:60vw">
 </div>
 
 <div style="float:left; margin-left: 10px; width:32vw;">
 
-  <div>
+  <!-- <div>
     Sphere radius:
     <input id="radius" type="range" min=3 max=30 value=5>
     <span id='radiusPrint'>
 </span>
     <br>
-  </div>
+  </div> -->
   <br>
   <div style='background-color:pink'>
-    Color Selector:
+    Object Selector:
     <br>
-    <input type=radio name='c' value='red' id="red"><img src="https://i.imgur.com/mGdIosi.png"   width="5%" height="5%" border="0" align="absmiddle">table
-    <input type=radio name='c' value='blue'id="blue">chair
+    <input type=radio name='c' value='red' id="red" >Chair
+    <input type=radio name='c' value='blue'id="blue">Table
   </div>
   <br>
   <button id='clear' style="width:45%">Clear</button>
   <button id='save' style="width:45%">Save</button>
   <button id='restore' style="width:45%">Restore</button>
 </div>
-
-
-
-
-
-
-
-
 <script>
+
+//////////////////////
+const onKeyDown = function ( event ) {
+
+  switch ( event.code ) {
+  
+    case 'ArrowUp':
+    case 'KeyW':
+      moveForward = true;
+      cyl.rotation.x+=Math.PI/20;
+      break;
+  
+    case 'ArrowLeft':
+    case 'KeyA':
+      moveLeft = true;
+      cyl.rotation.y+=Math.PI/20;
+      break;
+  
+    case 'ArrowDown':
+    case 'KeyS':
+      moveBackward = true;
+      cyl.rotation.x-=Math.PI/20;
+      break;
+  
+    case 'ArrowRight':
+    case 'KeyD':
+      moveRight = true;
+      cyl.rotation.y-=Math.PI/20;
+      break;
+  
+
+    
+  
+  }
+  
+  };
+  ///////////////////////
+  const onKeyUp = function ( event ) {
+  
+  switch ( event.code ) {
+  
+    case 'ArrowUp':
+    case 'KeyW':
+      moveForward = false;
+      break;
+  
+    case 'ArrowLeft':
+    case 'KeyA':
+      moveLeft = false;
+      break;
+  
+    case 'ArrowDown':
+    case 'KeyS':
+      moveBackward = false;
+      break;
+  
+    case 'ArrowRight':
+    case 'KeyD':
+      moveRight = false;
+      break;
+  
+  }
+  
+  };
+  //////////////////////////////////
+  document.addEventListener( 'keydown', onKeyDown );
+  document.addEventListener( 'keyup', onKeyUp );
+
+
+
 
   $('#radius').change(function() {
     $('#radiusPrint').text($(this).val());
@@ -76,14 +138,62 @@
   });
 
   $('#red').click(function() {
-    
+    scene.remove( cyl );
+    animate();
      mode=0;
+     var pc = new THREE.GLTFLoader();
+     //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
+     pc.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW4/glb/sofa_chair.glb', function ( gltf ) {
+             gltf.scene.traverse( function( node ) {
+               if ( node instanceof THREE.Mesh ) { 
+                 node.castShadow = true; 
+                 node.material.side = THREE.DoubleSide;
+                 //node.material.color=color2;
+                 //node.material.emissive=color2;
+               }
+             });  
+ 
+       cyl= gltf.scene;
+       cyl.rotation.y=Math.PI/2;
+       cyl.position.set(-20, 0, 20);
+       cyl.scale.set(20,20,20);
+       scene.add(cyl);
+     }, undefined, function ( error ) {
+ 
+       console.error( error );
+ 
+     } );
+     //scene.add(cyl);
+   
 
   });
   $('#blue').click(function() {
-    
+    scene.remove( cyl );
+    animate();
      mode=1;
-
+     var pc = new THREE.GLTFLoader();
+     //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
+     pc.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW4/glb/simple_table_low_poly.glb', function ( gltf ) {
+             gltf.scene.traverse( function( node ) {
+               if ( node instanceof THREE.Mesh ) { 
+                 node.castShadow = true; 
+                 node.material.side = THREE.DoubleSide;
+                 //node.material.color=color2;
+                 //node.material.emissive=color2;
+               }
+             });  
+ 
+       cyl= gltf.scene;
+       cyl.rotation.y=Math.PI/2;
+       cyl.position.set(-20, 0, 20);
+       cyl.scale.set(20,20,20);
+       scene.add(cyl);
+     }, undefined, function ( error ) {
+ 
+       console.error( error );
+ 
+     } );
+   
   });
 
 
@@ -93,19 +203,19 @@
     states.forEach(function(stateStr) {
       console.log(stateStr);
       var state = JSON.parse(stateStr);
-      buildSphere(state.rad, new THREE.Vector3(state.pos[0], 0, state.pos[1]));
+      buildSphere(state.rad, new THREE.Vector3(state.pos[0], 0, state.pos[1]),state.rot,state.mode);
     });
   
   });
   
-  function buildSphere(rad, pos) {
-  
+  function buildSphere(rad, pos,rot,mode) {
+    console.log("aabbcc");
     //var sphere = new THREE.Mesh(new THREE.SphereGeometry(rad, 20, 20), new THREE.MeshNormalMaterial());
    ////////////////////////////////////////  
    if(mode==0){
     var pcf = new THREE.GLTFLoader();
     //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
-    pcf.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW4/sofa_chair.glb', function ( gltf ) {
+    pcf.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW4/glb/sofa_chair.glb', function ( gltf ) {
             gltf.scene.traverse( function( node ) {
               if ( node instanceof THREE.Mesh ) { 
                 node.castShadow = true; 
@@ -116,12 +226,19 @@
             });  
 
       sphere= gltf.scene;
-      
-      sphere.rotation.y=Math.PI/2;
+      console.log(rot);
+      sphere.rotation.x=rot._x;
+      sphere.rotation.y=rot._y;
+      sphere.rotation.z=rot._z;
+      //{isEuler: true, _x: 0, _y: 1.5707963267948966, _z: 0.5026548245743668, _order: 'XYZ'} 回傳的key必需"一模一樣"
+      console.log("sphere",sphere.rotation);
+      //sphere.rotation.y=Math.PI/2;
       sphere.scale.set(20,20,20);
       var prop = {
         rad: rad,
-        pos: [pos.x, pos.z]
+        pos: [pos.x, pos.z],
+        rot: rot,
+        mode:mode
       };
       console.log(prop);
       sphere.name = JSON.stringify(prop);
@@ -141,7 +258,7 @@
   else if(mode==1){    
     var table = new THREE.GLTFLoader();
     //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
-    table.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW4/wood_table_bench.glb', function ( gltf ) {
+    table.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW4/glb/simple_table_low_poly.glb', function ( gltf ) {
             gltf.scene.traverse( function( node ) {
               if ( node instanceof THREE.Mesh ) { 
                 //node.castShadow = true; 
@@ -153,11 +270,15 @@
 
       sphere2= gltf.scene;
       
-      sphere2.rotation.y=Math.PI/2;
+      sphere2.rotation.x=rot._x;
+      sphere2.rotation.y=rot._y;
+      sphere2.rotation.z=rot._z;
       sphere2.scale.set(20,20,20);
       var prop = {
         rad: rad,
-        pos: [pos.x, pos.z]
+        pos: [pos.x, pos.z],
+        rot: rot,
+        mode:mode
       };
       console.log(prop);
       sphere2.name = JSON.stringify(prop);
@@ -189,7 +310,7 @@
   }
   
   function init() {
-  
+    
     var ww = $("#container").innerWidth();
     var hh = $("#container").innerHeight();
     renderer = new THREE.WebGLRenderer();
@@ -235,24 +356,26 @@
     var grassMap = loader.load ('https://i.imgur.com/ADGE9Ix.jpg');
     var grassAlpha = loader.load ('https://i.imgur.com/mGdIosi.png?1');
     var grassFloor = new THREE.Mesh (new THREE.PlaneGeometry (500,500), new THREE.MeshBasicMaterial({map: grassMap, transparent:true, alphaMap: grassAlpha}));
-  
+    
     var stoneMap = loader.load ('https://i.imgur.com/T1ZbCDb.jpg');
     var stoneAlpha = loader.load ('https://i.imgur.com/D9alJjG.png');
     var stoneFloor = new THREE.Mesh (new THREE.PlaneGeometry (500,500), new THREE.MeshBasicMaterial({map: stoneMap, transparent:true, alphaMap: stoneAlpha}));
     floorGroup.add (grassFloor, stoneFloor);
+    floorGroup.position.set(0,-6,0);
     scene.add (floorGroup);
     
     floorGroup.rotation.x = -Math.PI/2;
 
   
-    var cyl_geom = new THREE.RingGeometry(5, 10, 32);
+    /*var cyl_geom = new THREE.RingGeometry(5, 10, 32);
     var cyl_mat = new THREE.MeshBasicMaterial({
       color: 0xff1234,
     });
     cyl = new THREE.Mesh(cyl_geom, cyl_mat);
     cyl.rotation.x = -Math.PI/2;
-    cyl.position.set(-20, 0, 20);
-    scene.add(cyl);
+    cyl.position.set(-20, 0, 20);*/
+
+
   
     pickplane = new THREE.Mesh(new THREE.PlaneGeometry(500, 500),
       new THREE.MeshBasicMaterial({
@@ -262,8 +385,8 @@
     scene.add(pickplane);
     pickplane.material.visible = false;
   
-    var gridXZ = new THREE.GridHelper(200, 20, 'red', 'white');
-    scene.add(gridXZ);
+   // var gridXZ = new THREE.GridHelper(200, 20, 'red', 'white');
+   // scene.add(gridXZ);
   
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     window.addEventListener('resize', onWindowResize, false);
@@ -291,6 +414,7 @@
     raycaster.setFromCamera(mouse, camera);
     var intersects = raycaster.intersectObject(pickplane);
     if (intersects.length > 0) {
+   
       cyl.position.copy(intersects[0].point);
       cyl.position.y = 2;
     }
@@ -308,7 +432,7 @@
     var intersects = raycaster.intersectObject(pickplane);
     if (intersects.length > 0) {
       cyl.position.copy(intersects[0].point);
-      buildSphere(10, intersects[0].point);
+      buildSphere(10, intersects[0].point,cyl.rotation,mode);
     }
   }
   
