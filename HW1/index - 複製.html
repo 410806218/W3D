@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<style>
+img.word-icon {
+  content: url(http://i.imgur.com/iBXGew8.jpg);
+  width: 100px;
+  height: 100px;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 20vw;
+  background-color: #f1f1f1;
+}
+
+li a {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+li a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+li a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+</style>
+</head>
+<h1>HW1</h1>
+<body> 
+
+<div >
+  
+  <div style="position:absolute;float:left;top:20vh;width:20vw;height:70vh;">
+   
+    <div style="position:absolute;">
+    <ul>
+      <li><a href="#power" Onclick="power()">Power when img cant work</a></li>
+      <li><a href="#news">News</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+    </div>
+    <div id="poweron"style="position:relative;float:left;top:20vh;" ><img  id='power' src="https://i.imgur.com/WHbS3Bx.jpg`" style="width: 150px;" Onclick="power()"></div>
+  </div>
+
+  <div style="position:relative;float:right;left:5vw; width:80vw; height:70vh">
+    <div id='bkgd' style="position:absolute; float:right; top: 10vh; left: 10vw; width:50%; height: 70vh">
+      <img src="https://i.imgur.com/omX5Drl.png" style=" top: 10vh; left: 10vw;width: 100%; height :70vh;"  >
+    
+    </div>
+  </div>  
+
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<script>
+
+var points = [];
+var lamps=[];
+
+var btn =0;
+
+init();
+//position:absolute;
+
+function init(){
+  
+  document.querySelector('#bkgd').addEventListener ('pointerdown', doMouseDown, false);
+  
+  
+
+ 
+  
+}
+function power(){
+  let powers = document.getElementById('power');
+  if(btn===0){
+      powers.setAttribute("src",`https://i.imgur.com/nUy1R7T.jpg`)
+      console.log("aaaaa");
+      lamps.forEach(function(value){
+      value.startBlink(); 
+      console.log("aaaaa");
+      btn=1;
+    });
+  }
+  else{
+    
+    powers.setAttribute("src",`https://i.imgur.com/WHbS3Bx.jpg`)
+
+    lamps.forEach(function(value){
+      value.stopBlink();
+  })
+  btn=0;
+}
+}
+//https://stackoverflow.com/questions/50744683/how-do-i-convert-an-x-coordinate-to-pixels-in-javascript
+//https://tools.wingzero.tw/article/sn/102
+//https://www.w3schools.com/jsref/event_onclick.asp
+//https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
+//https://medium.com/jordanttcdesign/javascript-%E5%B0%8F%E5%AD%B8-event-%E4%BA%8B%E4%BB%B6-ep2-1a9854f8255c
+//https://ithelp.ithome.com.tw/articles/10212202
+//https://stackoverflow.com/questions/6073505/what-is-the-difference-between-screenx-y-clientx-y-and-pagex-y
+function doMouseDown(event) {
+  //event.preventDefault();
+  console.log("do");
+  //這是jquery的另一個寫法
+  // console.log($('#bkgd').click());
+  // $('#bkgd').click(function (e){
+  //   console.log("bkgd:");
+  //   var elm = $(this);
+  //   var xPos = e.pageX - elm.offset().left;
+  //   var yPos = e.pageY - elm.offset().top;
+  //   console.log(xPos, yPos);
+  //   points.push(xPos,yPos);
+  //   var ll = new Lamp ('light');
+  // //ll.startBlink();
+  //   console.log(lamps.length+" "+ll.id);
+  //   lamps.push(ll);
+  //   Lamp.id++;
+
+  // });
+  
+
+  //this=現在的元素
+  points = []
+  let mouseX = (event.clientX- $(this).offset().left);
+  points.push(mouseX);
+  
+  let mouseY = (event.clientY-$(this).offset().top);
+  points.push(mouseY);
+  var ll = new Lamp ('light');
+  //ll.startBlink();
+  console.log(lamps.length+" "+ll.id);
+  lamps.push(ll);
+  Lamp.id++;
+  
+  console.log(points[0]+" "+points[1]);
+}
+// area不能在這裡使用
+// <area shape="circle" coords="180,139,14" href="venus.htm" alt="Venus" />
+ 
+// $('#bkgd').click(function (e){
+//     var elm = $(this);
+//     var xPos = e.pageX - elm.offset().left;
+//     var yPos = e.pageY - elm.offset().top;
+//     console.log(xPos, yPos);
+// });
+  
+
+
+class Lamp {
+
+  constructor(name) {
+  
+    this.name = name+Lamp.id;
+    this.myStatus = false;
+    this.interfid=0;
+    let el = document.createElement ('div');
+    
+    // console.log(points[0]+" "+points[1]);
+    //el.setAttribute("area",`shape="circle";coords=(${points[0]},${points[1]},50)`);
+    
+    el.id = this.name;
+   // let text = document.createTextNode (name + ' is OFF');
+   //el.appendChild(text);
+
+    let bkgd = document.getElementById('bkgd');
+    bkgd.appendChild(el);
+    this.hue = Math.random()*360;
+
+    // styles //border-radius:100% 邊緣弧度
+    el.setAttribute ("style", `background-color: hsl(${this.hue}, 90%, 50%); width:20px;height:20px;border-radius:100%`);
+    
+    this.left = points[0];
+    this.top = points[1];
+    console.log(this.left+" "+this.top);
+    el.style.position = "absolute";
+    el.style.left = this.left-10+'px'; 
+    el.style.top = this.top-10+'px' ;
+  }
+
+  toggle() {
+    this.myStatus = ! this.myStatus;
+    if (this.myStatus === true) {
+      $('#'+this.name).css('backgroundColor', `hsl(${this.hue},90%,80%)`);
+     // $('#'+this.name).text(this.name + ' is on');
+    } else {
+      $('#'+this.name).css('backgroundColor', `hsl(${this.hue},90%,24%)`);
+     // $('#'+this.name).text(this.name + ' is off');
+    }
+  }
+
+  startBlink() {
+    var that = this;
+    
+    this.interfid=setInterval(function() {
+      that.toggle();
+    }, getRandomInt(1000,2000));
+    console.log("interfid="+this.interfid);
+  }
+  stopBlink(){
+    clearInterval(this.interfid);
+    $('#'+this.name).css('backgroundColor', `gray`);
+  }
+}
+function getRandomInt(max,min) {
+  return Math.floor(Math.random() * (max-min)+min+1);
+}
+Lamp.id = 0;
+
+
+
+
+</script>
+</body>
+
+</html>
