@@ -4,9 +4,9 @@
 </div>
 <script src="https://threejs.org/build/three.min.js"></script>
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
-<script src="https://threejs.org/examples/js/controls/PointerLockControls.js"></script>
-<script src="https://unpkg.com/three@0.129.0/examples/js/loaders/GLTFLoader.js"></script>
+<!-- <script src="https://threejs.org/examples/jsm/controls/OrbitControls.js"></script>
+<script src="https://threejs.org/examples/jsm/controls/PointerLockControls.js"></script>
+<script src="https://unpkg.com/three@0.129.0/examples/jsm/loaders/GLTFLoader.js"></script> -->
 
 <html>
   <style>
@@ -45,10 +45,25 @@
   </div>
 
 <body>
-<script>
-
+  <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.138.0/build/three.module.js",
+            "OrbitControls": "https://unpkg.com/three@0.138.0/examples/jsm/controls/OrbitControls.js",
+            "PointerLockControls": "https://unpkg.com/three@0.138.0/examples/jsm/controls/PointerLockControls.js",
+            "GLTFLoader":"https://unpkg.com/three@0.138.0/examples/jsm/loaders/GLTFLoader.js"
+        }
+    }
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+    import {OrbitControls} from 'OrbitControls';
+    import {PointerLockControls} from 'PointerLockControls';
+    import {GLTFLoader} from 'GLTFLoader';
 let camera, scene, renderer, controls;
-
+var artlamplighthelper,
+artlamplighthelper2,
+artlamplighthelper3;
 			const objects = [];
 
 			let raycaster;
@@ -88,7 +103,7 @@ function init() {
   camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
   camera.position.y = 50; // camera at (0,0,500)
   camera.position.x = 0; // camera at (0,0,500)
-  controls = new THREE.PointerLockControls( camera, document.body );
+  controls = new PointerLockControls( camera, document.body );
 ///////////////////////
 const blocker = document.getElementById( 'blocker' );
 				const instructions = document.getElementById( 'instructions' );
@@ -445,7 +460,7 @@ scene.add (ceil);
 ////////////////////////////////////////////////////////////////
 const color2 = new THREE.Color( 0x000000 );
 const color3 = new THREE.Color( 0xffffff );
-var artlamp = new THREE.GLTFLoader();
+var artlamp = new GLTFLoader();
 //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
 artlamp.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/artlamp.glb', function ( gltf ) {
          gltf.scene.traverse( function( node ) {
@@ -457,7 +472,7 @@ artlamp.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/ar
             node.material.emissive=color2;
           }
         });  
-  model= gltf.scene;
+  let model= gltf.scene;
   model.scale.set(0.05,0.05,0.05);
   model.position.set(60,40,-135);
   model.rotation.y=Math.PI;
@@ -467,7 +482,7 @@ artlamp.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/ar
 	console.error( error );
 
 } );
-artlamplight = new THREE.SpotLight(0xffffff, lightpower*5, 20, Math.PI/5, 0.974,1);
+var artlamplight = new THREE.SpotLight(0xffffff, lightpower*5, 20, Math.PI/5, 0.974,1);
 artlamplight.position.set(60,40,-135);
 artlamplight.castShadow=true;
 // artlamplight.shadow.mapSize.width = 512; // default
@@ -488,7 +503,7 @@ artlamplight.castShadow=true;
 
 
 ///////////////////////////////////////////////////////////////////
-var atlas = new THREE.GLTFLoader();
+var atlas = new GLTFLoader();
 //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
 atlas.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/atlas_holding_the_earth.glb', function ( gltf ) {
          gltf.scene.traverse( function( node ) {
@@ -500,7 +515,7 @@ atlas.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/atla
           }
         });  
       
-  model= gltf.scene;
+  let model= gltf.scene;
   artlamplight2.target=model;
   artlamplight3.target=model;
   model.scale.set(0.2,0.2,0.2);
@@ -520,7 +535,7 @@ atlas.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/atla
 } );
 
 //////////////////////////////////////////////////////////////////
-var pcf = new THREE.GLTFLoader();
+var pcf = new GLTFLoader();
 //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
 pcf.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/fancy_picture_frame.glb', function ( gltf ) {
          gltf.scene.traverse( function( node ) {
@@ -532,7 +547,7 @@ pcf.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/fancy_
           }
         });  
 
-  model= gltf.scene;
+  let model= gltf.scene;
   model.scale.set(20,20,20);
   model.position.set(60,25,-143.5);
   model.rotation.y=Math.PI/2;
@@ -548,38 +563,38 @@ pcf.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/fancy_
 	console.error( error );
 
 } );
-artlamplighthelper = new THREE.SpotLightHelper(artlamplight);
+ artlamplighthelper = new THREE.SpotLightHelper(artlamplight);
 scene.add(artlamplighthelper);
 //////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////
-chandelierlight = new THREE.PointLight( 0xffffff, lightpower, 200,decay=1);
+var chandelierlight = new THREE.PointLight( 0xffffff, lightpower, 200,1);
 chandelierlight.position.set(100,30,100);
 
 scene.add(chandelierlight);
-chandelierhelper = new THREE.PointLightHelper(chandelierlight);
+var chandelierhelper = new THREE.PointLightHelper(chandelierlight);
 scene.add(chandelierhelper);
 ////////////////////////////////////////////////////////////////
-chandelierlight2 = new THREE.PointLight( 0xffffff,lightpower, 150,decay=1);
+var chandelierlight2 = new THREE.PointLight( 0xffffff,lightpower, 150,1);
 chandelierlight2.position.set(60,30,-100);
 
 scene.add(chandelierlight2);
-chandelierhelper2 = new THREE.PointLightHelper(chandelierlight2);
+var chandelierhelper2 = new THREE.PointLightHelper(chandelierlight2);
 scene.add(chandelierhelper2);
 
 ///////////////////////////////////////////////////////////////////
-chandelierlight3 = new THREE.PointLight( 0xffffff, lightpower, 150,decay=1);
+var chandelierlight3 = new THREE.PointLight( 0xffffff, lightpower, 150,1);
 chandelierlight3.position.set(-70,35,80);
 
 scene.add(chandelierlight3);
-chandelierhelper3 = new THREE.PointLightHelper(chandelierlight3);
+var chandelierhelper3 = new THREE.PointLightHelper(chandelierlight3);
 scene.add(chandelierhelper3);
 ////////////////////////////////////////////////////////////
-chandelierlight4 = new THREE.PointLight( 0xffffff, lightpower, 200,decay=1);
+var chandelierlight4 = new THREE.PointLight( 0xffffff, lightpower, 200,1);
 chandelierlight4.position.set(-70,35,-40);
 
 scene.add(chandelierlight4);
-chandelierhelper4 = new THREE.PointLightHelper(chandelierlight4);
+var chandelierhelper4 = new THREE.PointLightHelper(chandelierlight4);
 scene.add(chandelierhelper4);
 //////////////////////////////////////////////////////////////
 // chandelierlight4 = new THREE.PointLight( 0xffffff, 1, 1,decay=1);
@@ -589,7 +604,7 @@ scene.add(chandelierhelper4);
 // chandelierhelper4 = new THREE.PointLightHelper(chandelierlight4);
 // scene.add(chandelierhelper4);
 ///////////////////////////////////////////////////////////////
-var  chandelier= new THREE.GLTFLoader();
+var  chandelier= new GLTFLoader();
 //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
 chandelier.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/lamp_chandelier_free_model.glb', function ( gltf ) {
          gltf.scene.traverse( function( node ) {
@@ -601,7 +616,7 @@ chandelier.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb
           }
         });  
 
-  model= gltf.scene;
+  let model= gltf.scene;
   model.scale.set(15,15,15);
   model.position.set(100,35,100);
   model.rotation.y=Math.PI/2;
@@ -619,7 +634,7 @@ chandelier.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb
 
 } );
 ////////////////////////////////////////////////////////////////
-var  chandelier2= new THREE.GLTFLoader();
+var  chandelier2= new GLTFLoader();
 //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
 chandelier2.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/lamp_chandelier_free_model.glb', function ( gltf ) {
          gltf.scene.traverse( function( node ) {
@@ -631,7 +646,7 @@ chandelier2.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/gl
           }
         });  
 
-  model= gltf.scene;
+  let model= gltf.scene;
   model.scale.set(15,15,15);
   model.position.set(60,35,-100);
   model.rotation.y=Math.PI/2;
@@ -649,7 +664,7 @@ chandelier2.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/gl
 
 } );
 /////////////////////////////////////////////////////////////////
-var  chandelier3= new THREE.GLTFLoader();
+var  chandelier3= new GLTFLoader();
 //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
 chandelier3.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/lamp_chandelier_free_model.glb', function ( gltf ) {
          gltf.scene.traverse( function( node ) {
@@ -661,7 +676,7 @@ chandelier3.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/gl
           }
         });  
 
-  model= gltf.scene;
+  let model= gltf.scene;
   model.scale.set(15,15,15);
   model.position.set(-70,35,80);
   model.rotation.y=Math.PI/2;
@@ -679,7 +694,7 @@ chandelier3.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/gl
 
 } );
 /////////////////////////////////////////////////////////////////
-var  chandelier4= new THREE.GLTFLoader();
+var  chandelier4= new GLTFLoader();
 //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
 chandelier4.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/lamp_chandelier_free_model.glb', function ( gltf ) {
          gltf.scene.traverse( function( node ) {
@@ -691,7 +706,7 @@ chandelier4.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/gl
           }
         });  
 
-  model= gltf.scene;
+  let model= gltf.scene;
   model.scale.set(15,15,15);
   model.position.set(-70,35,-40);
   model.rotation.y=Math.PI/2;
@@ -709,7 +724,7 @@ chandelier4.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/gl
 
 } );
 ///////////////////////////////////////////////////////////////////
-var  the_discobolus_of_myron= new THREE.GLTFLoader();
+var  the_discobolus_of_myron= new GLTFLoader();
 //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
 the_discobolus_of_myron.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/the_discobolus_of_myron.glb', function ( gltf ) {
          gltf.scene.traverse( function( node ) {
@@ -721,7 +736,7 @@ the_discobolus_of_myron.load( 'https://raw.githubusercontent.com/410806218/W3D/m
           }
         });  
 
-  model= gltf.scene;
+  let model= gltf.scene;
   model.scale.set(10,10,10);
   model.position.set(-112,2.5,-5.7);
   model.rotation.y=Math.PI/2;
@@ -739,7 +754,7 @@ the_discobolus_of_myron.load( 'https://raw.githubusercontent.com/410806218/W3D/m
 
 } );
 //////////////////////////////////////////////////////////////
-var  nazuna_nanakusa_fanart_sculpt= new THREE.GLTFLoader();
+var  nazuna_nanakusa_fanart_sculpt= new GLTFLoader();
 //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
 nazuna_nanakusa_fanart_sculpt.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/zeus_statue.glb', function ( gltf ) {
          gltf.scene.traverse( function( node ) {
@@ -751,7 +766,7 @@ nazuna_nanakusa_fanart_sculpt.load( 'https://raw.githubusercontent.com/410806218
           }
         });  
 
-  model= gltf.scene;
+  let model= gltf.scene;
   model.scale.set(1,1,1);
   model.position.set(100,-2,-100);
   model.rotation.y=Math.PI/2;
@@ -771,8 +786,8 @@ nazuna_nanakusa_fanart_sculpt.load( 'https://raw.githubusercontent.com/410806218
 //////////////////////////////////////////////////////////
 // const color2 = new THREE.Color( 0x000000 );
 // const color3 = new THREE.Color( 0xffffff );
-var artlamp2 = new THREE.GLTFLoader();
-artlamplight2 = new THREE.SpotLight(0xffffff, lightpower*5, 100, Math.PI/5, 1,1);
+var artlamp2 = new GLTFLoader();
+var artlamplight2 = new THREE.SpotLight(0xffffff, lightpower*5, 100, Math.PI/5, 1,1);
 artlamplight2.position.set(-50,35,-97);
 artlamplight2.castShadow=true;
 //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
@@ -786,7 +801,7 @@ artlamp2.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/a
             node.material.emissive=color2;
           }
         });  
-  model= gltf.scene;
+  let model= gltf.scene;
 
   model.scale.set(0.05,0.05,0.05);
   model.position.set(-50,35,-97);
@@ -798,13 +813,13 @@ artlamp2.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/a
 	console.error( error );
 
 } );
-artlamplighthelper2 = new THREE.SpotLightHelper(artlamplight2);
+ artlamplighthelper2 = new THREE.SpotLightHelper(artlamplight2);
   scene.add(artlamplighthelper2);
 /////////////////////////////////////////////////////////////
 // const color2 = new THREE.Color( 0x000000 );
 // const color3 = new THREE.Color( 0xffffff );
-var artlamp3 = new THREE.GLTFLoader();
-artlamplight3 = new THREE.SpotLight(0xffffff, lightpower, 50, Math.PI/5, 1,1);
+var artlamp3 = new GLTFLoader();
+var artlamplight3 = new THREE.SpotLight(0xffffff, lightpower, 50, Math.PI/5, 1,1);
 artlamplight3.position.set(-100,40,-97);
 artlamplight3.castShadow=true;
 //https://raw.githubusercontent.com/baronwatts/models/master/robber.glb
@@ -818,7 +833,7 @@ artlamp3.load( 'https://raw.githubusercontent.com/410806218/W3D/master/HW3/glb/a
             node.material.emissive=color2;
           }
         });  
-  model= gltf.scene;
+  let model= gltf.scene;
 
   model.scale.set(0.05,0.05,0.05);
   model.position.set(-100,35,-97);
